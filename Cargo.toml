@@ -1,0 +1,40 @@
+[workspace]
+members = [".", "packages/*"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "BSD-3-Clause"
+version = "0.1.0"
+repository = "https://github.com/tamascsaba/node-rs-krb5.git"
+
+[package]
+name = "krb5-js"
+version.workspace = true
+categories = ["cryptography"]
+license.workspace = true
+keywords = ["kerberos", "krb5", "gssapi", "sspi", "authentication"]
+repository.workspace = true
+edition.workspace = true
+homepage = "https://github.com/tamascsaba/node-rs-krb5"
+readme = "README.md"
+
+[lib]
+crate-type = ["cdylib"]
+
+[build-dependencies]
+napi-build = "2.0.1"
+
+[dependencies]
+krb5-rs = { path = "packages/krb5_rs" }
+thiserror = "1"
+napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
+napi-derive = "2.12.2"
+base64 = "0.21"
+regex = "1"
+lazy_static = "1.4"
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
