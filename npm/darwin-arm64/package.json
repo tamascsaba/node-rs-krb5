@@ -1,26 +1,23 @@
 {
-  "name": "node-rs-krb5-linux-x64-gnu",
+  "name": "node-rs-krb5-darwin-arm64",
   "version": "0.0.0",
   "os": [
-    "linux"
+    "darwin"
   ],
   "cpu": [
-    "x64"
+    "arm64"
   ],
-  "main": "node-rs-krb5.linux-x64-gnu.node",
+  "main": "node-rs-krb5.darwin-arm64.node",
   "files": [
-    "node-rs-krb5.linux-x64-gnu.node"
+    "node-rs-krb5.darwin-arm64.node"
   ],
   "license": "BSD-3-Clause",
   "engines": {
     "node": ">= 10"
   },
-  "libc": [
-    "glibc"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tamascsaba/node-rs-krb5",
-    "directory": "npm/linux-x64-gnu"
+    "directory": "npm/darwin-arm64"
   }
 }

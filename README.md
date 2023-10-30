@@ -6,7 +6,7 @@
 
 Prebuilt node kerberus native binding written by pure rust.
 It is based on node-krb5 (huge thx for @gboutry 🙏), but you don't need to compile the library.
-`node-rs-krb5` uses NAPI-RS, which is a Rust based framework for building pre-compiled Node.js addons.
+node-rs-krb5 uses [napi-rs](https://napi.rs/), which is a Rust based framework for building pre-compiled Node.js addons.
 We are supporting all the main platforms (mac, linux, windows) and CPU architectures (arm64, x64).
 
 # Features
@@ -32,7 +32,9 @@ npm install -S node-rs-krb5
 | macOS x64             | ✓      | ✓      | ✓      |
 | macOS arm64 (m chips) | ✓      | ✓      | ✓      |
 | Linux x64 gnu         | ✓      | ✓      | ✓      |
-| Linux arm64 gnu       | ✓      | ✓      | ✓      |
+
+Feel free to create an issue if you need other CPU architecture support. 🥰
+Initially, I only added the basics.
 
 ## Requirements of the usage
 
@@ -52,7 +54,7 @@ You need to install the MIT Kerberos library.
 
 * Windows
   ```
-  choco install mitkerberos --install-arguments="ADDLOCAL=all"
+  choco install mitkerberos
   ```
 
 # Usage

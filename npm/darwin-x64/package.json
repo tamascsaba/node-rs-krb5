@@ -11,8 +11,13 @@
   "files": [
     "node-rs-krb5.darwin-x64.node"
   ],
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "engines": {
     "node": ">= 10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tamascsaba/node-rs-krb5",
+    "directory": "npm/darwin-x64"
   }
 }
