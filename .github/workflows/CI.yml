@@ -32,14 +32,13 @@ jobs:
             build: |
               yarn build
               strip -x *.node
-          - host: macos-latest
+          - host: self-hosted
             target: aarch64-apple-darwin
             env:
-              PKG_CONFIG_PATH: /usr/local/opt/krb5/lib/pkgconfig
-              PKG_CONFIG_SYSROOT_DIR: /
+              PKG_CONFIG_PATH: /opt/homebrew/opt/krb5/lib/pkgconfig
             build: |
               brew info krb5
-              yarn build --target aarch64-apple-darwin
+              yarn build
               strip -x *.node
           - host: windows-latest
             env:
@@ -66,7 +65,6 @@ jobs:
         with:
           node-version: 20
           check-latest: true
-          cache: yarn
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         if: ${{ !matrix.settings.docker }}
@@ -103,7 +101,6 @@ jobs:
         with:
           node-version: 20
           check-latest: true
-          cache: yarn
           architecture: x86
       - name: Build in docker
         uses: addnab/docker-run-action@v3
@@ -147,7 +144,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-          cache: yarn
       - name: Install dependencies
         run: yarn install
       - name: Download artifacts
@@ -179,7 +175,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-          cache: yarn
       - name: Install dependencies
         run: yarn install
       - name: Download artifacts
@@ -205,7 +200,6 @@ jobs:
         with:
           node-version: 20
           check-latest: true
-          cache: yarn
       - name: Install dependencies
         run: yarn install
       - name: Download all artifacts
