@@ -19,6 +19,6 @@ export interface GenerateSpnegoTokenParameters {
   hostbased_service?: string
   ccname?: string
 }
-export function kinit(input: KinitParameters): Promise<string>
-export function kdestroy(input: KdestroyParameters): Promise<void>
-export function spnego(input: GenerateSpnegoTokenParameters): Promise<string>
+export declare function kinit(input: KinitParameters): Promise<string>
+export declare function kdestroy(input: KdestroyParameters): Promise<void>
+export declare function spnego(input: GenerateSpnegoTokenParameters): Promise<string>

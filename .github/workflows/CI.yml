@@ -2,20 +2,19 @@ name: CI
 env:
   DEBUG: napi:*
   APP_NAME: node-rs-krb5
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
 permissions:
   contents: write
   id-token: write
-'on':
+"on":
   push:
     branches:
       - main
     tags-ignore:
-      - '**'
+      - "**"
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
       - LICENSE
-      - '**/*.gitignore'
+      - "**/*.gitignore"
       - .editorconfig
       - docs/**
   pull_request: null
@@ -25,14 +24,14 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: macos-latest
+          - host: macos-15-intel
             target: x86_64-apple-darwin
             env:
               PKG_CONFIG_PATH: /usr/local/opt/krb5/lib/pkgconfig
             build: |
               yarn build
               strip -x *.node
-          - host: self-hosted
+          - host: macos-latest
             target: aarch64-apple-darwin
             env:
               PKG_CONFIG_PATH: /opt/homebrew/opt/krb5/lib/pkgconfig
@@ -41,38 +40,48 @@ jobs:
               yarn build
               strip -x *.node
           - host: windows-latest
+            target: x86_64-pc-windows-msvc
             env:
               FOO: bar
             build: |
               choco install mitkerberos --install-arguments="ADDLOCAL=all" || true
               yarn build
-            target: x86_64-pc-windows-msvc
-          - host: ubuntu-latest
+          - host: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
             env:
               PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig/
             build: |
-              apt-fast install -y libkrb5-dev pkg-config
+              sudo apt-get update -qq
+              sudo apt-get install -y libkrb5-dev pkg-config
               dpkg -L libkrb5-dev
               set -e && yarn build --target x86_64-unknown-linux-gnu && strip *.node
-    name: stable - ${{ matrix.settings.target }} - node@20
+          - host: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
+            env:
+              PKG_CONFIG_PATH: /usr/lib/aarch64-unknown-linux-gnu/pkgconfig/
+            build: |
+              sudo apt-get update -qq
+              sudo apt-get install -y libkrb5-dev pkg-config
+              dpkg -L libkrb5-dev
+              set -e && yarn build --target aarch64-unknown-linux-gnu && strip *.node
+    name: ${{ matrix.settings.target }}
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         if: ${{ !matrix.settings.docker }}
         with:
-          node-version: 20
+          node-version: 22
           check-latest: true
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         if: ${{ !matrix.settings.docker }}
         with:
-          toolchain: stable
+          toolchain: 1.81.0
           targets: ${{ matrix.settings.target }}
       - name: Cache cargo
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry/index/
@@ -81,33 +90,18 @@ jobs:
             .cargo-cache
             target/
           key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
-      - uses: goto-bus-stop/setup-zig@v2
-        if: ${{ matrix.settings.target == 'armv7-unknown-linux-gnueabihf' }}
-        with:
-          version: 0.10.1
       - name: Setup toolchain
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
-      - name: Setup node x86
-        if: matrix.settings.target == 'i686-pc-windows-msvc'
-        run: yarn config set supportedArchitectures.cpu "ia32"
-        shell: bash
       - name: Install dependencies
         run: yarn install
-      - name: Setup node x86
-        uses: actions/setup-node@v3
-        if: matrix.settings.target == 'i686-pc-windows-msvc'
-        with:
-          node-version: 20
-          check-latest: true
-          architecture: x86
       - name: Build in docker
         uses: addnab/docker-run-action@v3
         if: ${{ matrix.settings.docker }}
         with:
           image: ${{ matrix.settings.docker }}
-          options: '--user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build'
+          options: "--user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build"
           run: ${{ matrix.settings.build }}
       - name: Build
         run: ${{ matrix.settings.build }}
@@ -115,13 +109,13 @@ jobs:
         if: ${{ !matrix.settings.docker }}
         shell: bash
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
           path: ${{ env.APP_NAME }}.*.node
           if-no-files-found: error
-  test-macOS-windows-binding:
-    name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
+  test-bindings:
+    name: Test on ${{ matrix.settings.target }} - node@${{ matrix.node }}
     needs:
       - build
     strategy:
@@ -129,25 +123,31 @@ jobs:
       matrix:
         settings:
           - host: macos-latest
+            target: aarch64-apple-darwin
+          - host: macos-15-intel
             target: x86_64-apple-darwin
           - host: windows-latest
             target: x86_64-pc-windows-msvc
+          - host: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - host: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
         node:
-          - '18'
-          - '20'
-          - '21'
+          - "20"
+          - "22"
+          - "24"
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
       - name: Install dependencies
         run: yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.settings.target }}
           path: .
@@ -156,56 +156,25 @@ jobs:
         shell: bash
       - name: Test bindings
         run: yarn test
-  test-linux-x64-gnu-binding:
-    name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - '18'
-          - '20'
-          - '21'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-          check-latest: true
-      - name: Install dependencies
-        run: yarn install
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: bindings-x86_64-unknown-linux-gnu
-          path: .
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }} yarn test
   publish:
     name: Publish
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs:
-      - test-macOS-windows-binding
-      - test-linux-x64-gnu-binding
+      - test-bindings
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           check-latest: true
       - name: Install dependencies
         run: yarn install
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
-          path: artifacts
+          pattern: bindings-*
+          merge-multiple: true
       - name: Move artifacts
         run: yarn artifacts
       - name: List packages

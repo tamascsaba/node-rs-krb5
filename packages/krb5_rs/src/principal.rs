@@ -1,4 +1,4 @@
-use std::{mem::MaybeUninit, os::raw::c_uint};
+use std::{mem::MaybeUninit, os::raw::{c_char, c_uint}};
 
 use crate::{Context, Krb5Error, Result};
 use krb5_sys::{krb5_build_principal_ext, krb5_free_principal, krb5_principal};
@@ -24,7 +24,7 @@ impl<'context> Principal<'context> {
                     context.inner,
                     krb5_principal.as_mut_ptr(),
                     realm.len() as c_uint,
-                    realm.as_ptr() as *const i8,
+                    realm.as_ptr() as *const c_char,
                     user.len() as c_uint,
                     user.as_ptr(),
                     0,
@@ -37,7 +37,7 @@ impl<'context> Principal<'context> {
                     context.inner,
                     krb5_principal.as_mut_ptr(),
                     realm.len() as c_uint,
-                    realm.as_ptr() as *const i8,
+                    realm.as_ptr() as *const c_char,
                     user.len() as c_uint,
                     user.as_ptr(),
                     host.len() as c_uint,

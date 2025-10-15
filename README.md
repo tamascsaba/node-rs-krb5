@@ -26,12 +26,13 @@ npm install -S node-rs-krb5
 
 # Support matrix
 
-|                       | node18 | node20 | node21 |
+|                       | node20 | node22 | node24 |
 | --------------------- | ------ | ------ | ------ |
 | Windows x64           | ✓      | ✓      | ✓      |
 | macOS x64             | ✓      | ✓      | ✓      |
 | macOS arm64 (m chips) | ✓      | ✓      | ✓      |
 | Linux x64 gnu         | ✓      | ✓      | ✓      |
+| Linux arm gnu         | ✓      | ✓      | ✓      |
 
 Feel free to create an issue if you need other CPU architecture support. 🥰
 Initially, I only added the basics.
