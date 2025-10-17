@@ -1,6 +1,6 @@
 {
   "name": "node-rs-krb5-linux-x64-gnu",
-  "version": "0.0.0",
+  "version": "0.1.3",
   "os": [
     "linux"
   ],

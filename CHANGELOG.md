@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.2...v0.1.3) (2025-10-17)
+
+
+### Bug Fixes
+
+* **dependabot:** correct dependabot.yml to include npm and rust-toolchain ([2e6054b](https://github.com/tamascsaba/node-rs-krb5/commit/2e6054b330a018ba3bbe75a18ada95bee2e89060))
+
+
+
 ## [0.1.1](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.0...v0.1.1) (2023-11-02)
 
 
