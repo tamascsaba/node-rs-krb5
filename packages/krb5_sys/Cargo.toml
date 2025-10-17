@@ -5,7 +5,7 @@ edition = "2021"
 links = "krb5"
 
 [build-dependencies]
-bindgen = "0.63.0"
+bindgen = "0.72.1"
 cc = "1.0"
 
 [target.'cfg(not(windows))'.build-dependencies]
