@@ -12,4 +12,4 @@ cc = "1.0"
 pkg-config = "0.3"
 
 [target.'cfg(any(windows))'.build-dependencies]
-winreg = { version = "0.10" }
+winreg = { version = "0.55" }
