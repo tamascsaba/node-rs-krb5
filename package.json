@@ -18,7 +18,7 @@
     "@types/node": "^20.8.9",
     "ava": "^5.1.1",
     "conventional-changelog-cli": "^4.1.0",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   },
   "ava": {
