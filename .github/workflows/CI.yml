@@ -173,6 +173,7 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v5
         with:
+          path: artifacts
           pattern: bindings-*
           merge-multiple: true
       - name: Move artifacts
@@ -180,45 +181,20 @@ jobs:
       - name: List packages
         run: ls -R ./npm
         shell: bash
-      - name: Configure npm
+      - name: Publish
         run: |
           npm config set provenance true
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish packages
-        run: |
-          set -e
-
-          publish_pkg() {
-            local dir=$1
-            local tag=$2
-            cd "$dir"
-            echo "📦 Publishing $(jq -r .name package.json)@$(jq -r .version package.json) (tag: $tag)"
-            npm publish --access public --tag "$tag" || echo "⚠️ Skipped already published: $dir"
-            cd - >/dev/null
-          }
-
-          # Detect tag based on commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          if echo "$COMMIT_MSG" | grep -q "^chore(release):"; then
-            TAG="latest"
-          elif echo "$COMMIT_MSG" | grep -q "^chore(pre-release):"; then
-            TAG="next"
+          if git log -1 --pretty=%B | grep "^chore(release):";
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            npm publish --access public
+          elif git log -1 --pretty=%B | grep "^chore(pre-release):";
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            npm publish --tag next --access public
           else
             echo "Not a release, skipping publish"
-            exit 0
           fi
-
-          # Publish platform binaries first
-          for dir in ./npm/*; do
-            [ -f "$dir/package.json" ] && publish_pkg "$dir" "$TAG"
-          done
-
-          # Publish main package
-          publish_pkg "." "$TAG"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        shell: bash

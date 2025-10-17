@@ -1,4 +1,13 @@
-## [0.1.3](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.2...v0.1.3) (2025-10-17)
+## [0.1.4](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.3...v0.1.4) (2025-10-17)
+
+
+### Bug Fixes
+
+Correct release process
+
+
+
+## [0.1.3](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.3...v0.1.3) (2025-10-17)
 
 
 ### Bug Fixes
@@ -22,6 +31,3 @@
 ### Features
 
 * **library:** add initial library ([786aa3e](https://github.com/tamascsaba/node-rs-krb5/commit/786aa3e338f93afac5c239569da301ab046f8dd1))
-
-
-
