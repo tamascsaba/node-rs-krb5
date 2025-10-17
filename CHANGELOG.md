@@ -1,3 +1,11 @@
+## [0.1.5](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.2...v0.1.5) (2025-10-17)
+
+
+### Bug Fixes
+
+* **package:** add missing arm64 npm package folder ([fa47c84](https://github.com/tamascsaba/node-rs-krb5/commit/fa47c84a1b165defec4c64b0aa8a36019db143c4))
+
+
 ## [0.1.4](https://github.com/tamascsaba/node-rs-krb5/compare/v0.1.3...v0.1.4) (2025-10-17)
 
 

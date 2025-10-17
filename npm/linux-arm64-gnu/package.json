@@ -1,0 +1,26 @@
+{
+  "name": "node-rs-krb5-linux-arm64-gnu",
+  "version": "0.1.5",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "node-rs-krb5.linux-arm64-gnu.node",
+  "files": [
+    "node-rs-krb5.linux-arm64-gnu.node"
+  ],
+  "license": "BSD-3-Clause",
+  "engines": {
+    "node": ">= 10"
+  },
+  "libc": [
+    "glibc"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tamascsaba/node-rs-krb5",
+    "directory": "npm/linux-arm64-gnu"
+  }
+}
