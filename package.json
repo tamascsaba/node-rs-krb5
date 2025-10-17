@@ -1,13 +1,14 @@
 {
   "name": "node-rs-krb5",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
     "name": "node-rs-krb5",
     "triples": {
       "additional": [
-        "aarch64-apple-darwin"
+        "aarch64-apple-darwin",
+        "aarch64-unknown-linux-gnu"
       ]
     }
   },

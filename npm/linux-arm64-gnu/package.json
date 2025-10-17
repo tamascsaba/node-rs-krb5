@@ -5,7 +5,7 @@
     "linux"
   ],
   "cpu": [
-    "x64"
+    "arm64"
   ],
   "main": "node-rs-krb5.linux-arm64-gnu.node",
   "files": [
