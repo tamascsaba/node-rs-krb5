@@ -15,7 +15,7 @@
   "license": "BSD-3-Clause",
   "repository": "https://github.com/tamascsaba/node-rs-krb5",
   "devDependencies": {
-    "@napi-rs/cli": "^2.16.3",
+    "@napi-rs/cli": "^3.3.1",
     "@types/node": "^24.8.1",
     "ava": "^6.4.1",
     "conventional-changelog-cli": "^5.0.0",
