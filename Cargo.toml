@@ -29,7 +29,7 @@ napi-build = "2.0.1"
 krb5-rs = { path = "packages/krb5_rs" }
 thiserror = "2"
 napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
-napi-derive = "2.12.2"
+napi-derive = "3.3.0"
 base64 = "0.22"
 regex = "1"
 lazy_static = "1.4"
